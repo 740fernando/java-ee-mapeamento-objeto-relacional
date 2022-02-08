@@ -26,12 +26,20 @@ public class Programa {
 		EntityManager em = emf.createEntityManager();
 		// conexão com banco de dados - fim 
 		
+		//Consulta
 		Pessoa p = em.find(Pessoa.class, 2); // O jpa tem uma função especifica para buscar um determinado registro por id;
 		
-		System.out.println(p);
+		em.getTransaction().begin();
+		em.remove(p);//Exclui
+		em.getTransaction().commit();
 		
 		System.out.println("Pronto!");
 		em.close();
 		emf.close();
 	}
 }
+// obs : Para excluir um registro no banco de dados, é necessário que o objeto seja monitorado.
+/**
+ * O que é um objeto monitorado?
+ *  Ou é um objeto que você acabou de inserir, ou um objeto que foi recuperado do banco de dados e nao fechou o entityManager
+ */
