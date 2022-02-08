@@ -6,30 +6,32 @@ import javax.persistence.Persistence;
 
 import dominio.Pessoa;
 
+/**
+ * Um objeto EntityManager encapsula uma conexão com a base de dados e serve para efetuar operações de
+acesso a dados (inserção, remoção, deleção, atualização) em entidades (clientes, produtos, pedidos, etc.)
+por ele monitoradas em um mesmo contexto de persistência.
+ * 
+ * @author fsouviei
+ *
+ */
+
 public class Programa {
 
 	public static void main(String[]args) {
 		
-		// Foi atribuido o valor nulo para o id, porque o próprio banco de dados vai gerenciar inserção do valor
-		Pessoa p1 = new Pessoa(null,"Fernando Luiz","fernando@gmail.com");
-		Pessoa p2 = new Pessoa(null,"Lauren Ribeiro","lauren@gmail.com");
-		Pessoa p3 = new Pessoa(null,"Christtofer Luiz","chris@gmail.com");
+
 		
 		// conexão com o banco de dados - inicio
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("exemplo-jpa");// exemplo-jpa é o nome referenciado no persistence.xml
 		EntityManager em = emf.createEntityManager();
 		// conexão com banco de dados - fim 
 		
-		// Inserção das informações do objeto no banco de dados - inicio
-		em.getTransaction().begin(); // Quando JPA faz uma operação que não é uma simples leitura de dados, ele precisa de uma transação, é necessário chamar getTransaction().begin()
-		em.persist(p1);// método persist - É responsável por realizar o salvamento do objeto  no bd
-		em.persist(p2);
-		em.persist(p3);
-		em.getTransaction().commit();//confirmar as alterações
-		// Inserção das informações do objeto no banco de dados - fim
-
+		Pessoa p = em.find(Pessoa.class, 2); // O jpa tem uma função especifica para buscar um determinado registro por id;
+		
+		System.out.println(p);
 		
 		System.out.println("Pronto!");
-	
+		em.close();
+		emf.close();
 	}
 }
